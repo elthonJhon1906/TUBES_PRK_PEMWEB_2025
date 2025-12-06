@@ -28,6 +28,9 @@ use Controllers\AuthController;
 use Controllers\ProductBatchController;
 use Controllers\ProductCategoryController;
 use Controllers\ProductController;
+use Controllers\ExpenseCategoryController;
+use Controllers\ExpenseController;
+use Controllers\ExpenseMethodController;
 use Controllers\ProofTypeController;
 use Controllers\ServiceCategoryController;
 use Controllers\ServiceController;
@@ -63,6 +66,9 @@ $transactionMethodController = new TransactionMethodController();
 $verificationStatusController = new VerificationStatusController();
 $proofTypeController = new ProofTypeController();
 $transactionController = new TransactionController();
+$expenseCategoryController = new ExpenseCategoryController();
+$expenseMethodController = new ExpenseMethodController();
+$expenseController = new ExpenseController();
 $ownerOrStaff = new RoleMiddleware(['owner', 'staff']);
 
 RoleBootstrapper::ensureDefaults();
@@ -136,6 +142,24 @@ $router->add('GET', '/api/v1/payments/transactions', [$transactionController, 'i
 $router->add('GET', '/api/v1/payments/transactions/{id}', [$transactionController, 'show'], $inventoryGuards);
 $router->add('POST', '/api/v1/payments/transactions', [$transactionController, 'store'], $inventoryGuards);
 $router->add('PATCH', '/api/v1/payments/transactions/{id}', [$transactionController, 'update'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/expenses/categories', [$expenseCategoryController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/expenses/categories/{id}', [$expenseCategoryController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/expenses/categories', [$expenseCategoryController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/expenses/categories/{id}', [$expenseCategoryController, 'update'], $inventoryGuards);
+$router->add('DELETE', '/api/v1/expenses/categories/{id}', [$expenseCategoryController, 'destroy'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/expenses/methods', [$expenseMethodController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/expenses/methods/{id}', [$expenseMethodController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/expenses/methods', [$expenseMethodController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/expenses/methods/{id}', [$expenseMethodController, 'update'], $inventoryGuards);
+$router->add('DELETE', '/api/v1/expenses/methods/{id}', [$expenseMethodController, 'destroy'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/expenses', [$expenseController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/expenses/{id}', [$expenseController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/expenses', [$expenseController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/expenses/{id}', [$expenseController, 'update'], $inventoryGuards);
+$router->add('DELETE', '/api/v1/expenses/{id}', [$expenseController, 'destroy'], $inventoryGuards);
 
 try {
     $router->dispatch($request);
