@@ -11,6 +11,8 @@ tags:
     description: Manajemen akun pengguna & role.
   - name: Inventory
     description: Kategori produk, stok bahan, dan batch pembelian.
+  - name: Services
+    description: Katalog layanan fotokopi (kategori & paket layanan).
 servers:
   - url: http://localhost:8000/api/v1
     description: Local dev server
@@ -148,6 +150,57 @@ components:
         is_active:
           type: boolean
         created_at:
+          type: string
+          format: date-time
+    ServiceCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    Service:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        category_id:
+          type: integer
+        category_name:
+          type: string
+        category_code:
+          type: string
+        description:
+          type: string
+          nullable: true
+        base_price:
+          type: number
+          format: float
+        unit:
+          type: string
+        estimated_minutes:
+          type: integer
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
           type: string
           format: date-time
 paths:
@@ -844,3 +897,258 @@ paths:
       responses:
         '200':
           description: Batch dihapus
+  /services/categories:
+    get:
+      tags:
+        - Services
+      summary: Daftar kategori layanan
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List kategori layanan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceCategory'
+    post:
+      tags:
+        - Services
+      summary: Tambah kategori layanan
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '201':
+          description: Kategori dibuat
+  /services/categories/{id}:
+    get:
+      tags:
+        - Services
+      summary: Detail kategori layanan
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail kategori
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ServiceCategory'
+    patch:
+      tags:
+        - Services
+      summary: Ubah kategori layanan
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Kategori diperbarui
+    delete:
+      tags:
+        - Services
+      summary: Hapus kategori layanan
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Kategori dihapus
+  /services:
+    get:
+      tags:
+        - Services
+      summary: Daftar layanan fotokopi
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List layanan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+    post:
+      tags:
+        - Services
+      summary: Tambah layanan
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+                - category_id
+                - base_price
+                - unit
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                category_id:
+                  type: integer
+                description:
+                  type: string
+                  nullable: true
+                base_price:
+                  type: number
+                  format: float
+                unit:
+                  type: string
+                estimated_minutes:
+                  type: integer
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '201':
+          description: Layanan dibuat
+  /services/{id}:
+    get:
+      tags:
+        - Services
+      summary: Detail layanan
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail layanan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Service'
+    patch:
+      tags:
+        - Services
+      summary: Ubah layanan
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                category_id:
+                  type: integer
+                description:
+                  type: string
+                  nullable: true
+                base_price:
+                  type: number
+                  format: float
+                unit:
+                  type: string
+                estimated_minutes:
+                  type: integer
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Layanan diperbarui
+    delete:
+      tags:
+        - Services
+      summary: Hapus layanan
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Layanan dihapus
