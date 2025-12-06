@@ -1,0 +1,328 @@
+openapi: 3.0.3
+info:
+  title: Sistem Manajemen Operasional & Keuangan Fotokopi - API v1
+  version: 1.0.0
+  description: |
+    API untuk manajemen pengguna dan role.
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local dev server
+components:
+  securitySchemes:
+    SessionCookie:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+  schemas:
+    UserRole:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+          example: owner
+        name:
+          type: string
+        description:
+          type: string
+        level:
+          type: integer
+          example: 1
+        is_active:
+          type: boolean
+          default: true
+        created_at:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        role_id:
+          type: integer
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+paths:
+  /auth/register:
+    post:
+      summary: Registrasi member
+      description: Membuat akun baru dengan role default `member` serta mengembalikan sesi aktif.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+                - full_name
+                - password
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                full_name:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                phone:
+                  type: string
+                  nullable: true
+      responses:
+        '201':
+          description: Registrasi sukses
+          headers:
+            Set-Cookie:
+              description: Cookie sesi PHPSESSID
+              schema:
+                type: string
+  /auth/login:
+    post:
+      summary: Login user
+      description: Menghasilkan sesi login dan cookie `PHPSESSID`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Login success
+  /auth/logout:
+    post:
+      summary: Logout user
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: Logout success
+  /user-roles:
+    get:
+      summary: List roles
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: Role list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserRole'
+    post:
+      summary: Create role
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRole'
+      responses:
+        '201':
+          description: Created
+  /user-roles/{id}:
+    get:
+      summary: Get role detail
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Role detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserRole'
+    put:
+      summary: Update role
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRole'
+      responses:
+        '200':
+          description: Updated
+    delete:
+      summary: Delete role
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted
+  /users:
+    get:
+      summary: List users
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: User list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+    post:
+      summary: Create user
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+                - password
+                - full_name
+                - role_id
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                full_name:
+                  type: string
+                phone:
+                  type: string
+                  nullable: true
+                role_id:
+                  type: integer
+                is_active:
+                  type: boolean
+      responses:
+        '201':
+          description: Created
+  /users/{id}:
+    get:
+      summary: Get user detail
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User detail
+    put:
+      summary: Update user
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                full_name:
+                  type: string
+                phone:
+                  type: string
+                  nullable: true
+                role_id:
+                  type: integer
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Updated
+    delete:
+      summary: Delete user
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted
