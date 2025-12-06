@@ -28,10 +28,14 @@ use Controllers\AuthController;
 use Controllers\ProductBatchController;
 use Controllers\ProductCategoryController;
 use Controllers\ProductController;
+use Controllers\ProofTypeController;
 use Controllers\ServiceCategoryController;
 use Controllers\ServiceController;
+use Controllers\TransactionController;
+use Controllers\TransactionMethodController;
 use Controllers\UserController;
 use Controllers\UserRoleController;
+use Controllers\VerificationStatusController;
 use Core\HttpException;
 use Core\Request;
 use Core\Response;
@@ -55,6 +59,10 @@ $productController = new ProductController();
 $productBatchController = new ProductBatchController();
 $serviceCategoryController = new ServiceCategoryController();
 $serviceController = new ServiceController();
+$transactionMethodController = new TransactionMethodController();
+$verificationStatusController = new VerificationStatusController();
+$proofTypeController = new ProofTypeController();
+$transactionController = new TransactionController();
 $ownerOrStaff = new RoleMiddleware(['owner', 'staff']);
 
 RoleBootstrapper::ensureDefaults();
@@ -105,6 +113,29 @@ $router->add('GET', '/api/v1/services/{id}', [$serviceController, 'show'], $inve
 $router->add('POST', '/api/v1/services', [$serviceController, 'store'], $inventoryGuards);
 $router->add('PATCH', '/api/v1/services/{id}', [$serviceController, 'update'], $inventoryGuards);
 $router->add('DELETE', '/api/v1/services/{id}', [$serviceController, 'destroy'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/payments/methods', [$transactionMethodController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/payments/methods/{id}', [$transactionMethodController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/payments/methods', [$transactionMethodController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/payments/methods/{id}', [$transactionMethodController, 'update'], $inventoryGuards);
+$router->add('DELETE', '/api/v1/payments/methods/{id}', [$transactionMethodController, 'destroy'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/payments/verification-statuses', [$verificationStatusController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/payments/verification-statuses/{id}', [$verificationStatusController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/payments/verification-statuses', [$verificationStatusController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/payments/verification-statuses/{id}', [$verificationStatusController, 'update'], $inventoryGuards);
+$router->add('DELETE', '/api/v1/payments/verification-statuses/{id}', [$verificationStatusController, 'destroy'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/payments/proof-types', [$proofTypeController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/payments/proof-types/{id}', [$proofTypeController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/payments/proof-types', [$proofTypeController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/payments/proof-types/{id}', [$proofTypeController, 'update'], $inventoryGuards);
+$router->add('DELETE', '/api/v1/payments/proof-types/{id}', [$proofTypeController, 'destroy'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/payments/transactions', [$transactionController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/payments/transactions/{id}', [$transactionController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/payments/transactions', [$transactionController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/payments/transactions/{id}', [$transactionController, 'update'], $inventoryGuards);
 
 try {
     $router->dispatch($request);
