@@ -13,6 +13,10 @@ tags:
     description: Kategori produk, stok bahan, dan batch pembelian.
   - name: Services
     description: Katalog layanan fotokopi (kategori & paket layanan).
+  - name: Payments
+    description: Metode pembayaran, bukti, verifikasi, dan transaksi kasir.
+  - name: Expenses
+    description: Kategori biaya, metode pengeluaran, dan log pengeluaran operasional.
 servers:
   - url: http://localhost:8000/api/v1
     description: Local dev server
@@ -201,6 +205,83 @@ components:
           type: string
           format: date-time
         updated_at:
+          type: string
+          format: date-time
+    ExpenseCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    ExpenseMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    Expense:
+      type: object
+      properties:
+        id:
+          type: integer
+        expense_code:
+          type: string
+        expense_date:
+          type: string
+          format: date
+        category_id:
+          type: integer
+        category_name:
+          type: string
+        product_id:
+          type: integer
+          nullable: true
+        product_name:
+          type: string
+          nullable: true
+        product_batch_id:
+          type: integer
+          nullable: true
+        batch_code:
+          type: string
+          nullable: true
+        description:
+          type: string
+        amount:
+          type: number
+          format: float
+        transaction_method_id:
+          type: integer
+        transaction_method_name:
+          type: string
+        created_by:
+          type: integer
+        notes:
+          type: string
+          nullable: true
+        created_at:
           type: string
           format: date-time
     TransactionMethod:
@@ -1748,3 +1829,383 @@ paths:
       responses:
         '200':
           description: Status verifikasi diperbarui
+  /expenses/categories:
+    get:
+      tags:
+        - Expenses
+      summary: Daftar kategori pengeluaran
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List kategori pengeluaran
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExpenseCategory'
+    post:
+      tags:
+        - Expenses
+      summary: Tambah kategori pengeluaran
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '201':
+          description: Kategori pengeluaran dibuat
+  /expenses/categories/{id}:
+    get:
+      tags:
+        - Expenses
+      summary: Detail kategori pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail kategori pengeluaran
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ExpenseCategory'
+    patch:
+      tags:
+        - Expenses
+      summary: Ubah kategori pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Kategori diperbarui
+    delete:
+      tags:
+        - Expenses
+      summary: Hapus kategori pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Kategori dihapus
+  /expenses/methods:
+    get:
+      tags:
+        - Expenses
+      summary: Daftar metode pengeluaran
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List metode pengeluaran
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExpenseMethod'
+    post:
+      tags:
+        - Expenses
+      summary: Tambah metode pengeluaran
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '201':
+          description: Metode pengeluaran dibuat
+  /expenses/methods/{id}:
+    get:
+      tags:
+        - Expenses
+      summary: Detail metode pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail metode pengeluaran
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ExpenseMethod'
+    patch:
+      tags:
+        - Expenses
+      summary: Ubah metode pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Metode diperbarui
+    delete:
+      tags:
+        - Expenses
+      summary: Hapus metode pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Metode dihapus
+  /expenses:
+    get:
+      tags:
+        - Expenses
+      summary: Daftar pengeluaran operasional
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List pengeluaran
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Expense'
+    post:
+      tags:
+        - Expenses
+      summary: Catat pengeluaran operasional
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - expense_date
+                - category_id
+                - description
+                - amount
+                - transaction_method_id
+                - created_by
+              properties:
+                expense_code:
+                  type: string
+                expense_date:
+                  type: string
+                  format: date
+                category_id:
+                  type: integer
+                product_id:
+                  type: integer
+                  nullable: true
+                product_batch_id:
+                  type: integer
+                  nullable: true
+                description:
+                  type: string
+                amount:
+                  type: number
+                  format: float
+                transaction_method_id:
+                  type: integer
+                created_by:
+                  type: integer
+                notes:
+                  type: string
+                  nullable: true
+      responses:
+        '201':
+          description: Pengeluaran dicatat
+  /expenses/{id}:
+    get:
+      tags:
+        - Expenses
+      summary: Detail pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail pengeluaran
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Expense'
+    patch:
+      tags:
+        - Expenses
+      summary: Ubah pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expense_date:
+                  type: string
+                  format: date
+                category_id:
+                  type: integer
+                product_id:
+                  type: integer
+                  nullable: true
+                product_batch_id:
+                  type: integer
+                  nullable: true
+                description:
+                  type: string
+                amount:
+                  type: number
+                  format: float
+                transaction_method_id:
+                  type: integer
+                notes:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Pengeluaran diperbarui
+    delete:
+      tags:
+        - Expenses
+      summary: Hapus pengeluaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Pengeluaran dihapus
