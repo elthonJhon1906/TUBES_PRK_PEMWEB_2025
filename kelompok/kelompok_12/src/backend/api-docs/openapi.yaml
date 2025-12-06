@@ -203,6 +203,113 @@ components:
         updated_at:
           type: string
           format: date-time
+    TransactionMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        needs_proof:
+          type: boolean
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    ProofType:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    VerificationStatus:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        transaction_code:
+          type: string
+        order_id:
+          type: integer
+        transaction_date:
+          type: string
+          format: date-time
+        transaction_method_id:
+          type: integer
+        transaction_method_name:
+          type: string
+        amount_paid:
+          type: number
+        change_amount:
+          type: number
+        proof_type_id:
+          type: integer
+        proof_type_name:
+          type: string
+        proof_image_url:
+          type: string
+        bank_name:
+          type: string
+          nullable: true
+        account_name:
+          type: string
+          nullable: true
+        reference_number:
+          type: string
+          nullable: true
+        verification_status_id:
+          type: integer
+        verification_status_name:
+          type: string
+        verified_by:
+          type: integer
+          nullable: true
+        verified_at:
+          type: string
+          format: date-time
+          nullable: true
+        staff_id:
+          type: integer
+        notes:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
 paths:
   /auth/register:
     post:
@@ -1152,3 +1259,492 @@ paths:
       responses:
         '200':
           description: Layanan dihapus
+  /payments/methods:
+    get:
+      tags:
+        - Payments
+      summary: Daftar metode pembayaran
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List metode
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TransactionMethod'
+    post:
+      tags:
+        - Payments
+      summary: Tambah metode pembayaran
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                needs_proof:
+                  type: boolean
+                is_active:
+                  type: boolean
+      responses:
+        '201':
+          description: Metode dibuat
+  /payments/methods/{id}:
+    get:
+      tags:
+        - Payments
+      summary: Detail metode pembayaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail metode
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TransactionMethod'
+    patch:
+      tags:
+        - Payments
+      summary: Ubah metode pembayaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                needs_proof:
+                  type: boolean
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Metode diperbarui
+    delete:
+      tags:
+        - Payments
+      summary: Hapus metode pembayaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Metode dihapus
+  /payments/verification-statuses:
+    get:
+      tags:
+        - Payments
+      summary: Daftar status verifikasi
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationStatus'
+    post:
+      tags:
+        - Payments
+      summary: Tambah status verifikasi
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '201':
+          description: Status dibuat
+  /payments/verification-statuses/{id}:
+    get:
+      tags:
+        - Payments
+      summary: Detail status verifikasi
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/VerificationStatus'
+    patch:
+      tags:
+        - Payments
+      summary: Ubah status verifikasi
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Status diperbarui
+    delete:
+      tags:
+        - Payments
+      summary: Hapus status verifikasi
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Status dihapus
+  /payments/proof-types:
+    get:
+      tags:
+        - Payments
+      summary: Daftar jenis bukti pembayaran
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List bukti
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProofType'
+    post:
+      tags:
+        - Payments
+      summary: Tambah jenis bukti pembayaran
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - name
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '201':
+          description: Jenis bukti dibuat
+  /payments/proof-types/{id}:
+    get:
+      tags:
+        - Payments
+      summary: Detail jenis bukti pembayaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail bukti
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ProofType'
+    patch:
+      tags:
+        - Payments
+      summary: Ubah jenis bukti pembayaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Bukti diperbarui
+    delete:
+      tags:
+        - Payments
+      summary: Hapus jenis bukti pembayaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Bukti dihapus
+  /payments/transactions:
+    get:
+      tags:
+        - Payments
+      summary: Daftar transaksi pembayaran
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List transaksi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+    post:
+      tags:
+        - Payments
+      summary: Catat transaksi pembayaran
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+                - transaction_method_id
+                - amount_paid
+                - proof_type_id
+                - proof_image_url
+                - verification_status_id
+                - staff_id
+              properties:
+                order_id:
+                  type: integer
+                transaction_method_id:
+                  type: integer
+                amount_paid:
+                  type: number
+                change_amount:
+                  type: number
+                proof_type_id:
+                  type: integer
+                proof_image_url:
+                  type: string
+                bank_name:
+                  type: string
+                  nullable: true
+                account_name:
+                  type: string
+                  nullable: true
+                reference_number:
+                  type: string
+                  nullable: true
+                verification_status_id:
+                  type: integer
+                verified_by:
+                  type: integer
+                  nullable: true
+                verified_at:
+                  type: string
+                  format: date-time
+                  nullable: true
+                staff_id:
+                  type: integer
+                notes:
+                  type: string
+                  nullable: true
+      responses:
+        '201':
+          description: Transaksi tercatat
+  /payments/transactions/{id}:
+    get:
+      tags:
+        - Payments
+      summary: Detail transaksi pembayaran
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail transaksi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Transaction'
+    patch:
+      tags:
+        - Payments
+      summary: Update status verifikasi transaksi
+      security:
+        - SessionCookie: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - verification_status_id
+              properties:
+                verification_status_id:
+                  type: integer
+                verified_by:
+                  type: integer
+                  nullable: true
+                verified_at:
+                  type: string
+                  format: date-time
+                  nullable: true
+                notes:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Status verifikasi diperbarui
