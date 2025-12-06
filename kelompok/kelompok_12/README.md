@@ -43,15 +43,15 @@ kelompok_12/
    ```
 2. **Import struktur database.**
    ```bash
-   mysql -u root -p percetakan < src/database/database.sql
+   mysql -u root -p npc < src/database/database.sql
    ```
 3. **Atur koneksi database** (opsional bila tidak memakai kredensial bawaan).
-   - Default berada pada `127.0.0.1:3306`, DB `percetakan`, user `root`, tanpa sandi.
+   - Default berada pada `127.0.0.1:3306`, DB `npc`, user `root`, tanpa sandi.
    - Override dengan mengekspor variabel lingkungan sebelum menjalankan server:
      ```bash
      export DB_HOST=127.0.0.1
      export DB_PORT=3306
-     export DB_DATABASE=percetakan
+     export DB_DATABASE=npc
      export DB_USERNAME=root
      export DB_PASSWORD=your_password
      ```
