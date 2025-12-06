@@ -28,6 +28,8 @@ use Controllers\AuthController;
 use Controllers\ProductBatchController;
 use Controllers\ProductCategoryController;
 use Controllers\ProductController;
+use Controllers\ServiceCategoryController;
+use Controllers\ServiceController;
 use Controllers\UserController;
 use Controllers\UserRoleController;
 use Core\HttpException;
@@ -51,6 +53,8 @@ $authController = new AuthController();
 $productCategoryController = new ProductCategoryController();
 $productController = new ProductController();
 $productBatchController = new ProductBatchController();
+$serviceCategoryController = new ServiceCategoryController();
+$serviceController = new ServiceController();
 $ownerOrStaff = new RoleMiddleware(['owner', 'staff']);
 
 RoleBootstrapper::ensureDefaults();
@@ -89,6 +93,18 @@ $router->add('GET', '/api/v1/inventory/product-batches/{id}', [$productBatchCont
 $router->add('POST', '/api/v1/inventory/product-batches', [$productBatchController, 'store'], $inventoryGuards);
 $router->add('PATCH', '/api/v1/inventory/product-batches/{id}', [$productBatchController, 'update'], $inventoryGuards);
 $router->add('DELETE', '/api/v1/inventory/product-batches/{id}', [$productBatchController, 'destroy'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/services/categories', [$serviceCategoryController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/services/categories/{id}', [$serviceCategoryController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/services/categories', [$serviceCategoryController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/services/categories/{id}', [$serviceCategoryController, 'update'], $inventoryGuards);
+$router->add('DELETE', '/api/v1/services/categories/{id}', [$serviceCategoryController, 'destroy'], $inventoryGuards);
+
+$router->add('GET', '/api/v1/services', [$serviceController, 'index'], $inventoryGuards);
+$router->add('GET', '/api/v1/services/{id}', [$serviceController, 'show'], $inventoryGuards);
+$router->add('POST', '/api/v1/services', [$serviceController, 'store'], $inventoryGuards);
+$router->add('PATCH', '/api/v1/services/{id}', [$serviceController, 'update'], $inventoryGuards);
+$router->add('DELETE', '/api/v1/services/{id}', [$serviceController, 'destroy'], $inventoryGuards);
 
 try {
     $router->dispatch($request);
