@@ -140,6 +140,6 @@ final class Transaction
 
     private function generateCode(): string
     {
-        return 'TRX-' . date('YmdHis') . '-' . random_int(100, 999);
+        return substr('TRX-' . date('ymdHis') . '-' . random_int(100, 999), 0, 20);
     }
 }

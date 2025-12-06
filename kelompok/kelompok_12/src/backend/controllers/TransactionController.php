@@ -93,6 +93,11 @@ final class TransactionController
             throw new HttpException('Data transaksi tidak lengkap.', 422);
         }
 
+        $transactionCode = isset($body['transaction_code']) ? trim((string) $body['transaction_code']) : null;
+        if ($transactionCode !== null && $transactionCode !== '' && strlen($transactionCode) > 20) {
+            $transactionCode = substr($transactionCode, 0, 20);
+        }
+        $transactionDate = isset($body['transaction_date']) ? $this->normalizeDateTime((string) $body['transaction_date']) : null;
         return [
             'order_id' => (int) $orderId,
             'transaction_method_id' => (int) $methodId,
@@ -105,11 +110,11 @@ final class TransactionController
             'reference_number' => isset($body['reference_number']) ? trim((string) $body['reference_number']) : null,
             'verification_status_id' => (int) $verificationStatusId,
             'verified_by' => isset($body['verified_by']) ? (int) $body['verified_by'] : null,
-            'verified_at' => isset($body['verified_at']) ? (string) $body['verified_at'] : null,
+            'verified_at' => isset($body['verified_at']) ? $this->normalizeDateTime((string) $body['verified_at']) : null,
             'staff_id' => (int) $staffId,
             'notes' => isset($body['notes']) ? trim((string) $body['notes']) : null,
-            'transaction_code' => isset($body['transaction_code']) ? trim((string) $body['transaction_code']) : null,
-            'transaction_date' => isset($body['transaction_date']) ? trim((string) $body['transaction_date']) : null,
+            'transaction_code' => $transactionCode !== '' ? $transactionCode : null,
+            'transaction_date' => $transactionDate,
         ];
     }
 
@@ -124,8 +129,25 @@ final class TransactionController
         return [
             'verification_status_id' => (int) $verificationStatusId,
             'verified_by' => isset($body['verified_by']) ? (int) $body['verified_by'] : null,
-            'verified_at' => isset($body['verified_at']) ? (string) $body['verified_at'] : date('Y-m-d H:i:s'),
+            'verified_at' => isset($body['verified_at'])
+                ? $this->normalizeDateTime((string) $body['verified_at'])
+                : date('Y-m-d H:i:s'),
             'notes' => isset($body['notes']) ? trim((string) $body['notes']) : null,
         ];
+    }
+
+    private function normalizeDateTime(string $value): string
+    {
+        if ($value === '') {
+            return date('Y-m-d H:i:s');
+        }
+
+        $date = date_create($value);
+
+        if ($date === false) {
+            throw new HttpException('Format tanggal tidak valid.', 422);
+        }
+
+        return $date->format('Y-m-d H:i:s');
     }
 }
