@@ -22,26 +22,26 @@ Berdasarkan implementasi, sistem ini menyediakan fitur sebagai berikut:
 1.  **Halaman Beranda & Informasi Umum**
     * Tampilan utama yang menyajikan informasi layanan cetak dokumen, jilid skripsi, fotokopi, dan pengadaan ATK secara digital.
     * **Keunggulan NPC System:** Transparan (status pengerjaan *real-time*), Fleksibel (Upload PDF, Word, Gambar), Aman (Dokumen dijamin kerahasiaannya).
-    ![Halaman Beranda NPC System](dokumentasi/Screenshot 2025-12-11 214558.jpg)
-    ![Tentang Kami & Layanan](dokumentasi/Screenshot 2025-12-11 214614.png)
+    ![Halaman Beranda NPC System](dokumentasi/Screenshot%202025-12-11%20214558.jpg)
+    ![Tentang Kami & Layanan](dokumentasi/Screenshot%202025-12-11%20214614.png)
 
 2.  **Katalog & Daftar Harga Produk**
     * Menampilkan detail layanan seperti **Jasa Print & Fotokopi** (contoh: Fotokopi Rp 500/lembar) dan **Jasa Jilid Profesional**.
     * Tersedia informasi **Live Stok** dan spesifikasi detail produk yang tersedia.
-    ![Daftar Harga Jasa Print & Fotokopi](dokumentasi/Screenshot 2025-12-11 214646.jpg)
-    ![Daftar Harga Jasa Jilid Profesional](dokumentasi/Screenshot 2025-12-11 214704.jpg)
-    ![Daftar Harga Suplai Alat Tulis Kantor (ATK)](dokumentasi/Screenshot 2025-12-11 214722.jpg)
+    ![Daftar Harga Jasa Print & Fotokopi](dokumentasi/Screenshot%202025-12-11%20214646.jpg)
+    ![Daftar Harga Jasa Jilid Profesional](dokumentasi/Screenshot%202025-12-11%20214704.jpg)
+    ![Daftar Harga Suplai Alat Tulis Kantor (ATK)](dokumentasi/Screenshot%202025-12-11%20214722.jpg)
 
 3.  **Sistem Pelacakan Pesanan (*Order Tracking*)**
     * Pelanggan dapat memasukkan Kode Pickup untuk melihat status pengerjaan secara *real-time*.
     * Status yang disajikan meliputi: **Standby**, **Diproses**, **Siap Ambil**, dan **Selesai (*Completed*)**.
-    ![Lacak Pesanan Anda](dokumentasi/Screenshot 2025-12-11 214547.png)
+    ![Lacak Pesanan Anda](dokumentasi/Screenshot%202025-12-11%20214547.png)
 
 4.  **Manajemen Akun Pengguna**
     * Terdapat modul **Login** untuk pengguna yang sudah terdaftar.
     * Fitur **Lupa Password** yang memungkinkan pengguna melakukan *reset* melalui email.
-    ![Halaman Login](dokumentasi/Screenshot 2025-12-11 214733.jpg)
-    ![Halaman Lupa Password](dokumentasi/Screenshot 2025-12-11 214743.png)
+    ![Halaman Login](dokumentasi/Screenshot%202025-12-11%20214733.jpg)
+    ![Halaman Lupa Password](dokumentasi/Screenshot%202025-12-11%20214743.png)
 
 ## 🚀 Cara Menjalankan di Windows (XAMPP)
 
@@ -61,4 +61,4 @@ Berdasarkan implementasi, sistem ini menyediakan fitur sebagai berikut:
 * **Alamat Toko:** Jl. Kampung Baru, Bandar Lampung.
 * **Kontak:** (0898) 123-4567.
 * **Jam Operasional:** Senin - Minggu (08:00 - 20:00).
-![Footer Informasi Kontak](dokumentasi/Screenshot 2025-12-11 214629.png)
+![Footer Informasi Kontak](dokumentasi/Screenshot%202025-12-11%20214629.png)
